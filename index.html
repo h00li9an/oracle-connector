@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oracle Connector with Cron</title>
+</head>
+<body>
+  <h1>Schedule Oracle Database Query</h1>
+  <form id="query-form">
+    <label for="user">Username:</label>
+    <input type="text" id="user" name="user" required><br><br>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required><br><br>
+
+    <label for="connectString">Connection String:</label>
+    <input type="text" id="connectString" name="connectString" required><br><br>
+
+    <label for="sqlQuery">SQL Query:</label>
+    <textarea id="sqlQuery" name="sqlQuery" rows="4" cols="50" required></textarea><br><br>
+
+    <label for="cronExpression">Cron Expression:</label>
+    <input type="text" id="cronExpression" name="cronExpression" required><br><br>
+
+    <label for="outputFile">Output File Path:</label>
+    <input type="text" id="outputFile" name="outputFile" required><br><br>
+
+    <button type="submit">Schedule Query</button>
+  </form>
+
+  <h2>Task Status</h2>
+  <pre id="task-status"></pre>
+
+  <script>
+    document.getElementById('query-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const user = document.getElementById('user').value;
+      const password = document.getElementById('password').value;
+      const connectString = document.getElementById('connectString').value;
+      const sqlQuery = document.getElementById('sqlQuery').value;
+      const cronExpression = document.getElementById('cronExpression').value;
+      const outputFile = document.getElementById('outputFile').value;
+
+      const response = await fetch('http://localhost:3000/schedule-query', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user, password, connectString, sqlQuery, cronExpression, outputFile })
+      });
+
+      const result = await response.json();
+      const statusContainer = document.getElementById('task-status');
+      
+      if (result.success) {
+        statusContainer.textContent = `Task scheduled successfully. Task ID: ${result.taskId}`;
+      } else {
+        statusContainer.textContent = `Error: ${result.error}`;
+      }
+    });
+  </script>
+</body>
+</html>
+
