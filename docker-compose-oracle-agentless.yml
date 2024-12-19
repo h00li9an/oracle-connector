@@ -1,16 +1,16 @@
 version: "3"
 services:
-  agentless:
-    container_name: oracle-agentless
-    hostname: oracle-agentless
-    image: gitlab.vairav.net:5050/vairav/images/uat/oracle-agentless:0.0.1
+  oracle-connector:
+    container_name: oracle-connector
+    hostname: oracle-connector
+    build:
+      context: backend
+      dockerfile: Dockerfile
     environment:
       - NODE_TLS_REJECT_UNAUTHORIZED=0
     volumes:
       - ./logs:/app/logs
-      - "/usr/share/zoneinfo/Asia/Kathmandu:/etc/localtime:ro"
-      - "/usr/share/zoneinfo/Asia/Kathmandu:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/etc/timezone:/etc/timezone:ro"
     ports:
       - 3000:3000
-    extra_hosts:
-      - "server01-vairav.mssql.local:10.10.154.25" #host for oracle server
