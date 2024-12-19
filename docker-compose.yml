@@ -1,0 +1,16 @@
+version: "3"
+services:
+  oracle-connector:
+    container_name: oracle-connector
+    hostname: oracle-connector
+    build:
+      context: backend
+      dockerfile: Dockerfile
+    environment:
+      - NODE_TLS_REJECT_UNAUTHORIZED=0
+    volumes:
+      - ./logs:/app/logs
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/etc/timezone:/etc/timezone:ro"
+    ports:
+      - 3000:3000
